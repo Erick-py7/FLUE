@@ -1,0 +1,23 @@
+# Modelos e artefatos ML
+*.task
+*.npy
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Dados e modelos (arquivos grandes)
+data/
+*.csv
+*.h5
+*.pt
+*.pkl
+models/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Ferramentas
+*.task
