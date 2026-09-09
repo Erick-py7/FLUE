@@ -88,12 +88,23 @@ def normalize_landmarks(landmarks):
     return pts.flatten()
 
 
+LINE_COLOR = (255, 255, 255)   # BGR - roxo claro / lavanda, para as conexoes
+POINT_COLOR = (0, 0, 0)  # BGR - azul céu, para os pontos
+
+
 def draw_landmarks(frame, landmarks):
-    """Desenha os pontos e as conexoes da mao manualmente no frame (BGR)."""
+    """Desenha os pontos e as conexoes da mao manualmente no frame (BGR),
+    em tons suaves de roxo claro, com um pouco de transparencia: linhas
+    um pouco mais grossas, pontos discretos e pequenos."""
     h, w = frame.shape[:2]
     pts = [(int(lm.x * w), int(lm.y * h)) for lm in landmarks]
 
+    overlay = frame.copy()
+
     for start, end in HAND_CONNECTIONS:
-        cv2.line(frame, pts[start], pts[end], (0, 255, 0), 2)
+        cv2.line(overlay, pts[start], pts[end], LINE_COLOR, 2, lineType=cv2.LINE_AA)
     for p in pts:
-        cv2.circle(frame, p, 4, (0, 0, 255), -1)
+        cv2.circle(overlay, p, 2, POINT_COLOR, -1, lineType=cv2.LINE_AA)
+
+    alpha = 0.65  # um pouco transparente, sem exagerar
+    cv2.addWeighted(overlay, alpha, frame, 1 - alpha, 0, dst=frame)
