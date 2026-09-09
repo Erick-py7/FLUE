@@ -37,7 +37,7 @@ def main():
         timestamp_ms = int((time.time() - start_time) * 1000)
         result = detector.detect_for_video(mp_image, timestamp_ms)
 
-        label_text = "Nenhuma mao detectada"
+        label_text = None
 
         if result.hand_landmarks:
             landmarks = result.hand_landmarks[0]
@@ -50,11 +50,10 @@ def main():
 
             if confidence >= CONFIDENCE_THRESHOLD:
                 label_text = f"{classes[idx]} ({confidence*100:.1f}%)"
-            else:
-                label_text = f"Incerto ({confidence*100:.1f}%)"
 
-        cv2.putText(frame, label_text, (10, 30),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+        if label_text:
+            cv2.putText(frame, label_text, (10, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, (200, 130, 190), 2, lineType=cv2.LINE_AA)
 
         cv2.imshow("Reconhecimento de sinais - LIBRAS", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
